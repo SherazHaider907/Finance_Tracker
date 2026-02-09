@@ -1,0 +1,65 @@
+{% extends "finance/base.html" %}
+{% block title %}Transactions{% endblock title %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+
+    <h1 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+        Your Transactions
+    </h1>
+
+    {% if transaction %}
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+        <table class="min-w-full border border-gray-200">
+            <thead class="bg-indigo-600 text-white">
+                <tr>
+                    <th class="px-4 py-3 text-left">Title</th>
+                    <th class="px-4 py-3 text-left">Amount</th>
+                    <th class="px-4 py-3 text-left">Type</th>
+                    <th class="px-4 py-3 text-left">Category</th>
+                    <th class="px-4 py-3 text-left">Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for t in transaction %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-3">{{ t.title }}</td>
+
+                    <td class="px-4 py-3 font-semibold
+                        {% if t.transaction_type == 'Income' %}
+                            text-green-600
+                        {% else %}
+                            text-red-600
+                        {% endif %}
+                    ">
+                        {{ t.amount }}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 text-xs rounded-full
+                            {% if t.transaction_type == 'Income' %}
+                                bg-green-100 text-green-700
+                            {% else %}
+                                bg-red-100 text-red-700
+                            {% endif %}
+                        ">
+                            {{ t.transaction_type }}
+                        </span>
+                    </td>
+
+                    <td class="px-4 py-3">{{ t.category }}</td>
+                    <td class="px-4 py-3">{{ t.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-center text-gray-600 mt-6">
+            No transactions found.
+        </p>
+    {% endif %}
+
+</div>
+{% endblock content %}

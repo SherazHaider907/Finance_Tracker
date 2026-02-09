@@ -6,3 +6,6 @@ class RegisterView(View):
     def get(self,request,*args, **kwargs):
         form = RegisterForm()
         return render(request,'finance/register.html',{'form':form})
+    def post(self,request,*args, **kwargs):
+        form = RegisterForm(request.POST)
+        return render(request,'finance/register.html',{'form':form})

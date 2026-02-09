@@ -5,6 +5,8 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Transaction,Goal
 from django.db.models import Sum
+from .admin import TransactionResource
+from django.http import HttpResponse
 class RegisterView(View):
     def get(self, request, *args, **kwargs):
         form = RegisterForm()
@@ -85,3 +87,13 @@ class GoalCreateView(LoginRequiredMixin, View):
             return redirect('dashboard')
         return render(request, 'finance/goal_form.html', {'form': form})    
     
+def export_transactions(request):
+    user_transcation = Transaction.objects.filter(user= request.user)
+    transaction_resourse = TransactionResource()
+    dataset = transaction_resourse.export(queryset=user_transcation)
+
+    excel_data = dataset.export('xlsx')
+
+    response = HttpResponse(excel_data,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="transactions.xlsx"'
+    return response

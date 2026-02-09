@@ -1,0 +1,78 @@
+{% extends "finance/base.html" %}
+{% block title %}Add Goal{% endblock title %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg">
+
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Add New Goal</h1>
+            <p class="text-sm text-gray-600">Set your financial target</p>
+        </div>
+
+        {% if form.errors %}
+        <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <strong>Form Error:</strong> Please fix the errors below.
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Goal Name -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Goal Name</label>
+                <input type="text" name="name"
+                       value="{{ form.name.value|default_if_none:'' }}"
+                       class="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                       placeholder="e.g. Buy Laptop" required>
+                {% if form.name.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Target Amount -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Target Amount</label>
+                <input type="number" step="0.01" name="target_amount"
+                       value="{{ form.target_amount.value|default_if_none:'' }}"
+                       class="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                       placeholder="e.g. 50000" required>
+                {% if form.target_amount.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.target_amount.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Current Amount -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Current Amount</label>
+                <input type="number" step="0.01" name="current_amount"
+                       value="{{ form.current_amount.value|default_if_none:'' }}"
+                       class="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                       placeholder="e.g. 10000" required>
+                {% if form.current_amount.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.current_amount.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Deadline -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Deadline</label>
+                <input type="date" name="deadline"
+                       value="{{ form.deadline.value|default_if_none:'' }}"
+                       class="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500" required>
+                {% if form.deadline.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.deadline.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Submit -->
+            <button type="submit"
+                    class="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition">
+                Add Goal
+            </button>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}

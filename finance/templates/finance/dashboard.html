@@ -1,5 +1,86 @@
 {% extends "finance/base.html" %}
 {% block title %}Dashboard{% endblock title %}
-{% block contect %}
-<h1>Dashboard</h1>
-{% endblock contect %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-gray-500 font-semibold mb-2">Total Income</h2>
+            <p class="text-2xl font-bold text-green-600">${{ total_income }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-gray-500 font-semibold mb-2">Total Expense</h2>
+            <p class="text-2xl font-bold text-red-600">${{ total_expense }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-gray-500 font-semibold mb-2">Net Saving</h2>
+            <p class="text-2xl font-bold text-indigo-600">${{ net_saving }}</p>
+        </div>
+    </div>
+
+    <!-- Goals with Progress and Deadline -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Your Goals</h2>
+        {% if goal_progress %}
+            <div class="space-y-4">
+                {% for item in goal_progress %}
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="flex justify-between mb-1">
+                        <h3 class="font-bold text-gray-800">{{ item.goal.name }}</h3>
+                        <span class="text-gray-500">${{ item.goal.target_amount }}</span>
+                    </div>
+                    <!-- Deadline -->
+                    <p class="text-sm text-gray-500 mb-2">Deadline: {{ item.goal.deadline|date:"M d, Y" }}</p>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-200 rounded-full h-4">
+                        <div class="bg-indigo-500 h-4 rounded-full" style="width: {{ item.progress }}%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">{{ item.progress|floatformat:0 }}% funded</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500">No goals added yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Recent Transactions -->
+    <div>
+        <h2 class="text-2xl font-semibold mb-4">Recent Transactions</h2>
+        {% if transactions %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow">
+                <thead>
+                    <tr class="bg-gray-100 text-left">
+                        <th class="py-2 px-4">Title</th>
+                        <th class="py-2 px-4">Amount</th>
+                        <th class="py-2 px-4">Type</th>
+                        <th class="py-2 px-4">Date</th>
+                        <th class="py-2 px-4">Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-2 px-4">{{ transaction.title }}</td>
+                        <td class="py-2 px-4">${{ transaction.amount }}</td>
+                        <td class="py-2 px-4">{{ transaction.transaction_type }}</td>
+                        <td class="py-2 px-4">{{ transaction.date|date:"M d, Y" }}</td>
+                        <td class="py-2 px-4">{{ transaction.category }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="text-gray-500">No transactions yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock content %}
